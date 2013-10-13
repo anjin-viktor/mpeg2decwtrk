@@ -4,6 +4,8 @@
 #include <gst/gst.h>
 #include <gst/base/gstbasesink.h>
 
+#include "gstmpegvideoparser/gstmpegvideoparser.h"
+
 #include <stdio.h>
 
 G_BEGIN_DECLS
@@ -28,6 +30,9 @@ struct _GstMpeg2WtrkInfoSink {
   gchar         *filename;
   FILE          *file;
   guint64       current_pos;
+  
+  GstMpegVideoSequenceHdr           sequence_hdr;
+  gboolean                          seq_hdr_is_actual;
 };
 
 struct _GstMpeg2WtrkInfoSinkClass {

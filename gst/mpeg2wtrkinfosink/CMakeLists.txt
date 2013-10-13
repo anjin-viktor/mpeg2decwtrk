@@ -10,6 +10,8 @@ pkg_search_module(GST REQUIRED gstreamer-1.0)
 
 set(SOURCES
 	mpeg2wtrkinfosink.c
+	gstmpegvideoparser/gstmpegvideoparser.c
+	gstmpegvideoparser/parserutils.c
 )
 
 
@@ -33,6 +35,8 @@ set (LIBRARY_OUTPUT_PATH
 	${BUILD_DIR}
 )
 
+
+add_definitions(-DGST_USE_UNSTABLE_API)
 
 add_library(${PROJECT} SHARED ${SOURCES}) 
 

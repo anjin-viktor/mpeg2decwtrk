@@ -3,6 +3,7 @@
 #endif
 
 #include "mpeg2wtrkinfosink.h"
+
 #include <string.h>
 #include <stdio.h>
 
@@ -47,7 +48,8 @@ static GstStaticPadTemplate sink_template =
 GST_STATIC_PAD_TEMPLATE ("sink", GST_PAD_SINK,
     GST_PAD_ALWAYS,
     GST_STATIC_CAPS ("video/mpeg, "
-        "mpegversion = (int)1, " 
+        "mpegversion = (int)2, " 
+        "parsed = (boolean) true, "
         "systemstream = (boolean) false")
     );
 
@@ -198,9 +200,41 @@ gst_mpeg2_wtrk_info_sink_render (GstBaseSink * bsink, GstBuffer * buf)
 {
   GstMpeg2WtrkInfoSink *sink;
   GstMapInfo info;
+  GstMpegVideoPacket packet;
+  guint offset = 0;
+
+  sink = GST_MPEG2_WTRK_INFO_SINK (bsink);
   gst_buffer_map (buf, &info, GST_MAP_READ);
 
   sink->current_pos += info.size;
+
+  while (gst_mpeg_video_parse(&packet, info.data, info.size, offset))
+  {
+    if (packet.size == (guint)-1)
+      packet.size = info.size - packet.offset;
+
+    offset = packet.offset + packet.size;
+
+    if (packet.type == GST_MPEG_VIDEO_PACKET_SEQUENCE)
+    {
+      gboolean res = gst_mpeg_video_packet_parse_sequence_header(&packet, &(sink -> sequence_hdr));
+      if (res)
+        sink -> seq_hdr_is_actual = TRUE;
+    }
+
+    if (packet.type >= GST_MPEG_VIDEO_PACKET_SLICE_MIN &&
+        packet.type <= GST_MPEG_VIDEO_PACKET_SLICE_MAX) 
+    {
+      if (sink -> seq_hdr_is_actual)
+      {
+        GstMpegVideoSliceHdr slice_hdr;
+        gboolean res = gst_mpeg_video_packet_parse_slice_header(&packet, &slice_hdr, 
+                   &(sink -> sequence_hdr), NULL);
+      }
+      else
+        GST_WARNING ("slice hdr before sequence hdr");
+    }
+  }
 
   gst_buffer_unmap (buf, &info);
 
@@ -225,6 +259,8 @@ gst_mpeg2_wtrk_info_sink_start (GstBaseSink * basesink)
 
   GST_DEBUG_OBJECT (sink, "opened file %s",
       sink->filename);
+
+  sink -> seq_hdr_is_actual = FALSE;
 
   return TRUE;
 

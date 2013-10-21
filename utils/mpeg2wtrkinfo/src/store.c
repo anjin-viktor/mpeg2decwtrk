@@ -32,7 +32,7 @@ void store_end (void)
     rc = xmlTextWriterEndDocument(xml_writer);
 }
 
-void store_entry (int *values, int size, int position)
+void store_entry (char **values, int size, int position)
 {
   int rc, i;
   char buffer[DEFAULT_BUFFER_SIZE];
@@ -50,7 +50,7 @@ void store_entry (int *values, int size, int position)
 
   for(i=0; i<size; i++)
   {
-    rc = xmlTextWriterWriteFormatElement(xml_writer, BAD_CAST "v", "%d", values[i]);
+    rc = xmlTextWriterWriteFormatElement(xml_writer, BAD_CAST "v", "%s", values[i]);
     if (rc < 0)
       goto error;
   }

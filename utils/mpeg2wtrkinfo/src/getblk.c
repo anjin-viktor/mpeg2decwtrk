@@ -33,6 +33,8 @@
 #include "global.h"
 
 
+static void check_vlc(int size, unsigned int value, int position);
+
 /* defined in getvlc.h */
 typedef struct {
   char run, level, len;
@@ -298,6 +300,7 @@ int dc_dct_pred[];
   for (i=1; ; i++)
   {
     code = Show_Bits(16);
+
     if (code>=16384 && !intra_vlc_format)
       tab = &DCTtabnext[(code>>12)-4];
     else if (code>=1024)
@@ -331,6 +334,8 @@ int dc_dct_pred[];
       Fault_Flag = 1;
       return;
     }
+
+    check_vlc(tab->len, Show_Bits(tab->len), ld->Bitcnt);
 
     Flush_Buffer(tab->len);
 
@@ -484,6 +489,8 @@ int comp;
       return;
     }
 
+    check_vlc(tab->len, Show_Bits(tab->len), ld->Bitcnt);
+
     Flush_Buffer(tab->len);
 
 #ifdef TRACE
@@ -566,5 +573,59 @@ int comp;
 
     if (base.scalable_mode==SC_DP && nc==base.priority_breakpoint-63)
       ld = &enhan;
+  }
+}
+
+void check_vlc(int size, unsigned int code, int position)
+{
+  switch(size)
+  {
+    case 8:
+      if(code == 38 || code == 33)
+      {
+        char *values[] = {"00100110", "00100001"};
+        store_entry(values, 2, position);
+      }
+      break;
+
+    case 12:
+      if(code == 29 || code == 24)
+      {
+        char *values[] = {"000000011101", "000000011000"};
+        store_entry(values, 2, position);
+      }
+      break;
+
+    case 13:
+      if(code == 26 || code == 25)
+      {
+        char *values[] = {"0000000011010", "0000000011001"};
+        store_entry(values, 2, position);
+      }
+      break;
+
+    case 14:
+      if(code == 31 || code == 30)
+      {
+        char *values[] = {"00000000011111", "00000000011110"};
+        store_entry(values, 2, position);
+      }
+      break;
+
+    case 15:
+      if(code == 29 || code == 28)
+      {
+        char *values[] = {"000000000011101", "000000000011100"};
+        store_entry(values, 2, position);
+      }
+      break;
+
+    case 16:
+      if(code == 19 || code == 18)
+      {
+        char *values[] = {"0000000000010011", "0000000000010010"};
+        store_entry(values, 2, position);
+      }
+      break;
   }
 }

@@ -37,7 +37,6 @@
 
 #include "config.h"
 #include "global.h"
-
 /* initialize buffer, call once before first getbits or showbits */
 
 void Initialize_Buffer()
@@ -46,14 +45,12 @@ void Initialize_Buffer()
   ld->Rdptr = ld->Rdbfr + 2048;
   ld->Rdmax = ld->Rdptr;
 
-#ifdef VERIFY
   /*  only the verifier uses this particular bit counter 
    *  Bitcnt keeps track of the current parser position with respect
    *  to the video elementary stream being decoded, regardless 
    *  of whether or not it is wrapped within a systems layer stream 
    */
   ld->Bitcnt = 0;
-#endif
 
   ld->Bfr = 0;
   Flush_Buffer(0); /* fills valid data into bfr */
@@ -139,7 +136,6 @@ void Flush_Buffer(N)
 int N;
 {
   int Incnt;
-
   ld->Bfr <<= N;
 
   Incnt = ld->Incnt -= N;
@@ -180,9 +176,9 @@ int N;
     ld->Incnt = Incnt;
   }
 
-#ifdef VERIFY 
+//#ifdef VERIFY 
   ld->Bitcnt += N;
-#endif /* VERIFY */
+//#endif /* VERIFY */
 
 }
 

@@ -172,9 +172,7 @@ void Flush_Buffer32()
   }
   ld->Incnt = Incnt;
 
-#ifdef VERIFY 
   ld->Bitcnt += 32;
-#endif /* VERIFY */
 }
 
 

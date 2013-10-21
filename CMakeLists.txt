@@ -12,3 +12,5 @@ endif()
 
 
 add_subdirectory(gst/mpeg2wtrkinfosink)
+
+add_subdirectory(utils/)

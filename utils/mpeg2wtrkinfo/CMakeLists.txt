@@ -19,11 +19,18 @@ set(SOURCES
 	src/spatscal.c
 	src/subspic.c
 	src/systems.c
+	src/store.c
 )
+
 
 
 set(LIBS
 	m
+	xml2
+)
+
+include_directories(
+	/usr/include/libxml2
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BUILD_DIR})

@@ -83,6 +83,11 @@ char *argv[];
     exit(1);
   }
 
+  if (store_init())
+  {
+    fprintf(stderr,"Error init file `%s` as output\n", Output_Wtrkinfo_Filename);
+    exit(1);    
+  }
 
   if(base.Infile != 0)
   {
@@ -147,7 +152,7 @@ char *argv[];
 
   if (Two_Streams)
     close(enhan.Infile);
-
+  store_end();
   return 0;
 }
 
@@ -358,7 +363,15 @@ Options: -i  file  main bitstream (base or spatial enhancement layer)\n\
 
   if(Main_Bitstream_Flag!=1)
   {
-    printf("There must be a main bitstream specified (-b filename)\n");
+    printf("There must be a main bitstream specified (-i filename)\n");
+  }
+
+
+
+  if(!(strcmp(Output_Wtrkinfo_Filename, " ")))
+  {
+    printf("There must be a out file specified (-o filename)\n");
+    exit(1);
   }
 
   Display_Progressive_Flag = 0;
@@ -551,6 +564,7 @@ static void Clear_Options()
   Verify_Flag = 0;
   Stats_Flag  = 0;
   User_Data_Flag = 0; 
+  Output_Wtrkinfo_Filename = " ";
 }
 
 

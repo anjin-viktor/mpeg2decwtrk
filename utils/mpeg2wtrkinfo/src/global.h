@@ -118,16 +118,14 @@ void form_predictions _ANSI_ARGS_((int bx, int by, int macroblock_type,
 void Spatial_Prediction _ANSI_ARGS_((void));
 
 /* store.c */
-//void Write_Frame _ANSI_ARGS_((unsigned char *src[], int frame));
+void store_entry _ANSI_ARGS_ ((int *values, int size, int position));
+int store_init _ANSI_ARGS_ ((void));
+void store_end _ANSI_ARGS_ ((void));
 
-/* display.c */
-/*void Initialize_Display_Process _ANSI_ARGS_((char *name));
-void Terminate_Display_Process _ANSI_ARGS_((void));
-void Display_Second_Field _ANSI_ARGS_((void));
-void dither _ANSI_ARGS_((unsigned char *src[]));
-void Initialize_Dither_Matrix _ANSI_ARGS_((void));
-*/
+
 /* global variables */
+
+EXTERN xmlTextWriterPtr xml_writer;
 
 EXTERN char Version[]
 #ifdef GLOBAL

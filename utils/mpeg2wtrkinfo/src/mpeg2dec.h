@@ -27,6 +27,9 @@
  *
  */
 
+#include <libxml/encoding.h>
+#include <libxml/xmlwriter.h>
+
 #define ERROR (-1)
 
 #define PICTURE_START_CODE      0x100
@@ -120,7 +123,7 @@
 
 
 #define FILENAME_LENGTH                       256
-
+#define DEFAULT_BUFFER_SIZE                   256
 
 
 

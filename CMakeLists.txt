@@ -20,4 +20,5 @@ set (LIBRARY_OUTPUT_PATH ${BUILD_DIR})
 
 add_subdirectory(src/)
 add_subdirectory(test/)
+add_subdirectory(samples/)
 enable_testing ()

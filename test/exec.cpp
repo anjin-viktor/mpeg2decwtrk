@@ -8,6 +8,7 @@
 #include "Const.h"
 #include "Expr.h"
 
+using namespace bcc;
 
 BOOST_AUTO_TEST_SUITE(exec);
 

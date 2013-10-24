@@ -5,6 +5,9 @@
 #include "Node.h"
 
 
+namespace bcc
+{
+
 class Var: public Node
 {
 	public:
@@ -15,6 +18,6 @@ class Var: public Node
 		std::size_t      m_varId;
 };
 
-
+}
 
 #endif

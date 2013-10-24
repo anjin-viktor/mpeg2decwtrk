@@ -4,6 +4,8 @@
 
 #include "Node.h"
 
+namespace bcc
+{
 
 class Const: public Node
 {
@@ -15,6 +17,6 @@ class Const: public Node
 		bool     m_value;
 };
 
-
+}
 
 #endif

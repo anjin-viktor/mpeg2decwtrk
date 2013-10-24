@@ -1,5 +1,7 @@
 #include "Const.h"
 
+using namespace bcc;
+
 Const::Const(bool value):
 m_value(value)
 {

@@ -2,6 +2,8 @@
 
 #include <boost/lexical_cast.hpp>
 
+using namespace bcc;
+
 Expr::Expr(Expr::Type type):
 m_exprType(type)
 {

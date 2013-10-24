@@ -6,6 +6,9 @@
 #include <memory>
 #include <stdexcept>
 
+namespace bcc
+{
+
 class Node
 {
 	public:
@@ -15,5 +18,6 @@ class Node
 		std::list<std::shared_ptr<Node> >   m_childs;
 };
 
+}
 
 #endif

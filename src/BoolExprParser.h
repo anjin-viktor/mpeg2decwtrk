@@ -16,6 +16,8 @@
 #include "Var.h"
 #include "Const.h"
 
+namespace bcc
+{
 
 template <typename Iterator>
 class BoolExprParser: public boost::spirit::qi::grammar<Iterator>
@@ -25,26 +27,26 @@ class BoolExprParser: public boost::spirit::qi::grammar<Iterator>
 		BoolExprParser::base_type(expression)
 		{
 			namespace qi = boost::spirit::qi;
-		    namespace phoenix = boost::phoenix;
-		    using phoenix::push_front;
+			namespace phoenix = boost::phoenix;
+			using phoenix::push_front;
 
 			expression = *qi::space >> term >> *( 
-					(*qi::space >>  '|' >> *qi::space >> term) [boost::bind(&BoolExprParser::Or_, this)]
-					| 
-					(*qi::space >>	'+'  >> *qi::space >> term) [boost::bind(&BoolExprParser::Xor_, this)]
-				);
+                    (*qi::space >>  '|' >> *qi::space >> term) [boost::bind(&BoolExprParser::Or_, this)]
+                    | 
+                    (*qi::space >>	'+'  >> *qi::space >> term) [boost::bind(&BoolExprParser::Xor_, this)]
+                );
 
 			term       = *qi::space >> factor >> *( 
-					(*qi::space >> '&' >> *qi::space >> factor) [boost::bind(&BoolExprParser::And_, this)]
-					);
+                    (*qi::space >> '&' >> *qi::space >> factor) [boost::bind(&BoolExprParser::And_, this)]
+                    );
 
 			factor      = element  | 
-						('!' >> *qi::space >> element) [boost::bind(&BoolExprParser::Not_, this)];
+                        ('!' >> *qi::space >> element) [boost::bind(&BoolExprParser::Not_, this)];
 
 			element     = (
                     qi::char_('0') [push_front(phoenix::ref(m_elementsQueue), 
                         std::shared_ptr<Node>(new Const(false)))]
-					|
+                    |
                     qi::char_('1') [push_front(phoenix::ref(m_elementsQueue), 
                         std::shared_ptr<Node>(new Const(true)))]
                     |
@@ -132,5 +134,6 @@ class BoolExprParser: public boost::spirit::qi::grammar<Iterator>
 		std::deque<std::shared_ptr<Node> >    m_elementsQueue;
 };
 
+}
 
 #endif

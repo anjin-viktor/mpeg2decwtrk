@@ -2,6 +2,8 @@
 
 #include <boost/lexical_cast.hpp>
 
+using namespace bcc;
+
 Var::Var(std::size_t varId):
 m_varId(varId)
 {

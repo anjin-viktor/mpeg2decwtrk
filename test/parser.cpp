@@ -3,6 +3,7 @@
 #include <boost/spirit/include/qi.hpp>
 #include "BoolExprParser.h"
 
+using namespace bcc;
 
 BOOST_AUTO_TEST_SUITE(parser);
 

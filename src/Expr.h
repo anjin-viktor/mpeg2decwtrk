@@ -4,6 +4,9 @@
 
 #include "Node.h"
 
+namespace bcc
+{
+
 class Expr: public Node
 {
 	public:
@@ -24,5 +27,6 @@ class Expr: public Node
 
 };
 
+}
 
 #endif

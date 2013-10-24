@@ -177,4 +177,55 @@ BOOST_AUTO_TEST_CASE(parse_exec_elementary)
 }
 
 
+
+BOOST_AUTO_TEST_CASE(parse_exec)
+{
+
+	BoolExprParser<std::string::iterator> parser;
+
+	std::string expr("(!0 & x4) & ((x0 | x1) & (x2 + x3))");
+
+	qi::parse(expr.begin(), expr.end(), parser);
+	std::shared_ptr<Node> root = parser.m_root;
+	parser.clear();
+
+	std::vector<bool> v(5);
+
+	v[0] = false;
+	v[1] = false;
+	v[2] = false;
+	v[3] = false;
+	v[4] = false;
+	BOOST_CHECK_EQUAL(root -> exec(v), false);
+
+	v[0] = true;
+	v[1] = true;
+	v[2] = true;
+	v[3] = true;
+	v[4] = true;
+	BOOST_CHECK_EQUAL(root -> exec(v), false);
+
+	v[0] = true;
+	v[1] = false;
+	v[2] = true;
+	v[3] = false;
+	v[4] = true;
+	BOOST_CHECK_EQUAL(root -> exec(v), true);
+
+	v[0] = false;
+	v[1] = true;
+	v[2] = false;
+	v[3] = false;
+	v[4] = true;
+	BOOST_CHECK_EQUAL(root -> exec(v), false);
+
+	v[0] = true;
+	v[1] = true;
+	v[2] = false;
+	v[3] = true;
+	v[4] = true;
+	BOOST_CHECK_EQUAL(root -> exec(v), true);
+
+}
+
 BOOST_AUTO_TEST_SUITE_END()

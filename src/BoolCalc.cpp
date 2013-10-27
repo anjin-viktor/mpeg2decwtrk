@@ -26,3 +26,12 @@ bool bcc::Function::calculate(const std::vector<bool> &values) const throw(std::
 
 	return m_root -> exec(values);
 }
+
+
+bool bcc::Function::calculate(const boost::dynamic_bitset<> &values) const throw(std::runtime_error)
+{
+	if(!m_root)
+		throw std::runtime_error("expression is empty");
+
+	return m_root -> exec(values);
+}

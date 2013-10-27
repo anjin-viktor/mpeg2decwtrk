@@ -20,6 +20,7 @@ class Expr: public Node
 
 		Expr(Expr::Type type);
 		bool exec(const std::vector<bool> &) const throw(std::runtime_error);
+		bool exec(const boost::dynamic_bitset<> &) const throw(std::runtime_error);
 
 	private:
 		Expr::Type    m_exprType;

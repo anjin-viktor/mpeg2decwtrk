@@ -11,6 +11,10 @@ if(NOT IS_DIRECTORY ${BUILD_DIR})
 endif()
 
 
-add_subdirectory(gst/mpeg2wtrkinfosink)
+set (EXECUTABLE_OUTPUT_PATH ${BUILD_DIR})
+set (LIBRARY_OUTPUT_PATH ${BUILD_DIR})
+
+set (BOOLCALC_BUILD_AS_PART_OF_PROJECT true)
 
 add_subdirectory(utils/)
+add_subdirectory(externals/boolcalc)

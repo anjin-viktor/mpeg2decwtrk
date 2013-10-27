@@ -33,11 +33,6 @@ include_directories(
 	/usr/include/libxml2
 )
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BUILD_DIR})
-
-set (LIBRARY_OUTPUT_PATH
-	${BUILD_DIR}
-)
 
 add_executable(${PROJECT} ${SOURCES}) 
 

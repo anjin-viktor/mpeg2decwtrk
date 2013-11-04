@@ -9,9 +9,11 @@ class Key
 {
 	public:
 		std::string                m_function;
-		boost::dynamic_bitset<>    m_lfstInitValue;
+		std::string                m_lfsrPolinom;
+		boost::dynamic_bitset<>    m_lfsrInitValue;
 };
 
-Key parseKeyFile(const std::string &fileName);
+Key parseKeyXML(const std::string &fileName);
+void writeKeyXML(const std::string &path, const Key &key);
 
 #endif

@@ -645,7 +645,6 @@ int Get_macroblock_address_increment()
 int Get_Luma_DC_dct_diff()
 {
   int code, size, dct_diff;
-  fprintf(stderr, "luma dc dct diff\n");
 #ifdef TRACE
 /*
   if (Trace_Flag)
@@ -723,7 +722,6 @@ int Get_Luma_DC_dct_diff()
 int Get_Chroma_DC_dct_diff()
 {
   int code, size, dct_diff;
-  fprintf(stderr, "chroma dc dct diff\n");
 
 #ifdef TRACE
 /*

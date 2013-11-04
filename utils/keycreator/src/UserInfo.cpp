@@ -1,4 +1,4 @@
-#include "UsersInfo.h"
+#include "UserInfo.h"
 
 #include <cassert>
 #include <algorithm>
@@ -62,4 +62,3 @@ std::vector<UserInfo> parseUsersInfoXML(const std::string &fileName)
 
 	return result;
 }
-

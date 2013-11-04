@@ -11,6 +11,7 @@ class WatermarkEntry
 	public:
 		boost::dynamic_bitset<> m_v1;
 		boost::dynamic_bitset<> m_v2;
+		boost::dynamic_bitset<> m_defaultValue;
 		std::size_t             m_position;
 
 };

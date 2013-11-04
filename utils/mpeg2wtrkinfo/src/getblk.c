@@ -584,7 +584,11 @@ void check_vlc(int size, unsigned int code, int position)
       if(code == 38 || code == 33)
       {
         char *values[] = {"00100110", "00100001"};
-        store_entry(values, 2, position);
+
+        if(code == 38)
+          store_entry(values, 2, position, "00100110");
+        else
+          store_entry(values, 2, position, "00100001");
       }
       break;
 
@@ -592,7 +596,11 @@ void check_vlc(int size, unsigned int code, int position)
       if(code == 29 || code == 24)
       {
         char *values[] = {"000000011101", "000000011000"};
-        store_entry(values, 2, position);
+
+        if(code == 29)
+          store_entry(values, 2, position, "000000011101");
+        else
+          store_entry(values, 2, position, "000000011000");
       }
       break;
 
@@ -600,7 +608,10 @@ void check_vlc(int size, unsigned int code, int position)
       if(code == 26 || code == 25)
       {
         char *values[] = {"0000000011010", "0000000011001"};
-        store_entry(values, 2, position);
+        if(code == 26)
+          store_entry(values, 2, position, "0000000011010");
+        else
+          store_entry(values, 2, position, "0000000011001");
       }
       break;
 
@@ -608,7 +619,10 @@ void check_vlc(int size, unsigned int code, int position)
       if(code == 31 || code == 30)
       {
         char *values[] = {"00000000011111", "00000000011110"};
-        store_entry(values, 2, position);
+        if(code == 31)
+          store_entry(values, 2, position, "00000000011111");
+        else
+          store_entry(values, 2, position, "00000000011110");
       }
       break;
 
@@ -616,7 +630,10 @@ void check_vlc(int size, unsigned int code, int position)
       if(code == 29 || code == 28)
       {
         char *values[] = {"000000000011101", "000000000011100"};
-        store_entry(values, 2, position);
+        if(code == 28)
+          store_entry(values, 2, position, "000000000011100");
+        else
+          store_entry(values, 2, position, "000000000011101");
       }
       break;
 
@@ -624,7 +641,10 @@ void check_vlc(int size, unsigned int code, int position)
       if(code == 19 || code == 18)
       {
         char *values[] = {"0000000000010011", "0000000000010010"};
-        store_entry(values, 2, position);
+        if(code == 19)
+          store_entry(values, 2, position, "0000000000010011");
+        else
+          store_entry(values, 2, position, "0000000000010010");
       }
       break;
   }

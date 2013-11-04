@@ -2,10 +2,20 @@
 #include <iterator>
 
 #include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 
 #include "WatermarkInfo.h"
-#include "UsersInfo.h"
+#include "UserInfo.h"
 #include "Key.h"
+#include "KeyCreator.h"
+
+void saveKeys(const std::vector<UserInfo> &users_info, const std::string &directory)
+{
+	boost::filesystem::create_directory(directory);
+
+	for(std::size_t i=0; i<users_info.size(); i++)
+		writeKeyXML(directory + "/" + users_info[i].m_id, users_info[i].m_key);
+}
 
 int main(int argc, char **argv)
 {
@@ -40,7 +50,10 @@ int main(int argc, char **argv)
 
 		std::vector<WatermarkEntry> entries = parseWatermarkInfoXML(vm["wtrk_info"].as<std::string>());
 		std::vector<UserInfo> users_info = parseUsersInfoXML(vm["users_info"].as<std::string>());
-		Key privateKey = parseKeyFile(vm["key"].as<std::string>());
+		Key privateKey = parseKeyXML(vm["key"].as<std::string>());
+
+		createKeys(users_info, entries, privateKey);
+		saveKeys(users_info, vm["out_dir"].as<std::string>());
 	}
 	catch(std::exception& e) {
 		std::cerr << "error: " << e.what() << "\n";

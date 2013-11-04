@@ -61,6 +61,12 @@ static void processNode(const xmlpp::Node* node, std::vector<WatermarkEntry> &wt
 				}
 				numValues++;
 			}
+			else if(nodeName == "DEFAULT_VALUE")
+			{
+				const xmlpp::ContentNode* nodeContent = 
+					dynamic_cast<const xmlpp::ContentNode*>(*((*iter) -> get_children().begin()));
+				entry.m_defaultValue = boost::dynamic_bitset<>(std::string(nodeContent -> get_content()));
+			}
 		}
 
 		wtrkInfo.push_back(entry);

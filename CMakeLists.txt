@@ -18,3 +18,6 @@ set (BOOLCALC_BUILD_AS_PART_OF_PROJECT true)
 
 add_subdirectory(utils/)
 add_subdirectory(externals/boolcalc)
+add_subdirectory(tests/)
+
+enable_testing()

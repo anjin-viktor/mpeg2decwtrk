@@ -1,12 +1,9 @@
-set(PROJECT keycreator)
+set(PROJECT cipher)
 
 project(${PROJECT})
 
 set(SOURCES
-	src/WatermarkInfo.cpp
-	src/UserInfo.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../../auxiliary/Key.cpp
-	src/KeyCreator.cpp
 	src/main.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../../auxiliary/LFSR.cpp
 )
@@ -16,7 +13,7 @@ find_package(PkgConfig)
 pkg_check_modules(GLIBMM glibmm-2.4)
 pkg_check_modules(LIBXML++ libxml++-2.6)
 
-find_package(Boost COMPONENTS program_options filesystem system REQUIRED)
+find_package(Boost COMPONENTS program_options REQUIRED)
 
 set(LIBS
 	${GLIBMM_LIBRARIES}
@@ -36,7 +33,6 @@ include_directories(
 if(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++11)
 endif()
-
 
 add_executable(${PROJECT} ${SOURCES}) 
 target_link_libraries(${PROJECT} ${LIBS})

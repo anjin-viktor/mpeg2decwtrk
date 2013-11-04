@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 		saveKeys(users_info, vm["out_dir"].as<std::string>());
 	}
 	catch(std::exception& e) {
-		std::cerr << "error: " << e.what() << "\n";
+		std::cerr << "Error: " << e.what() << "\n";
 		return 1;
 	}
 	catch(...) {

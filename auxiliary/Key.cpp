@@ -11,7 +11,6 @@ Key parseKeyXML(const std::string &fileName)
 {
 	xmlpp::DomParser parser;
 	parser.parse_file(fileName);
-
 	Key result;
 	if(parser)
 	{
@@ -31,8 +30,8 @@ Key parseKeyXML(const std::string &fileName)
 				{
 					const xmlpp::ContentNode* nodeContent = 
 						dynamic_cast<const xmlpp::ContentNode*>(*((*iter) -> get_children().begin()));
-					result.m_function = nodeContent -> get_content();
 
+					result.m_function = nodeContent -> get_content();
 					boost::algorithm::trim(result.m_function);
 				}
 				else if(nodeName == "K")

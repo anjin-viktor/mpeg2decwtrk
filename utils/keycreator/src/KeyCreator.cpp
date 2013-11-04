@@ -91,7 +91,7 @@ void createKeys(std::vector<UserInfo> &users, const std::vector<WatermarkEntry> 
 		createFeatures(users, wtrkInfo.size()));
 	LFSR lfsr(key.m_lfsrPolinom, key.m_lfsrInitValue);
 
-	for(std::size_t i=0; i<internalKeys[0].size(); i++)
+	for(std::size_t i=0; i<internalKeys[0].size(); i++, lfsr.nextState())
 		for(std::size_t k=0; k<users.size(); k++)
 			if(internalKeys[k].test(i))
 				users[k].m_key.m_function += " + " + monomToStr(lfsr.getLFSRVector());

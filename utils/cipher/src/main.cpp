@@ -29,9 +29,9 @@ void process(const std::string &in, const std::string &out, const Key &key)
 	for(;!fileIn.eof();)
 	{
 		char gamma = 0;
-		unsigned char mask = 1;
+		unsigned char mask = 1 << (sizeof(char) * CHAR_BIT - 1);
 
-		for(std::size_t i=0; i<sizeof(char) * CHAR_BIT; i++, mask <<= 1, lfsr.nextState())
+		for(;mask; lfsr.nextState(), mask >>= 1)
 		{
 			if(f.calculate(lfsr.getLFSRVector()))
 				gamma |= mask;

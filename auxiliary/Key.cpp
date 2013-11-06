@@ -7,56 +7,58 @@
 
 #include <libxml++/libxml++.h>
 
+
+class KeyParser: public xmlpp::SaxParser
+{
+	public:
+		KeyParser(Key *pkey): 
+			m_pkey(pkey)
+		{
+			*m_pkey = Key();
+		}
+
+		virtual ~KeyParser()
+		{
+		}
+
+	protected:
+		virtual void on_characters(const Glib::ustring& characters)
+		{
+			m_nodeContent += characters;
+		}
+
+		virtual void on_end_element(const Glib::ustring& name)
+		{
+			std::string nodeName(name);
+			std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
+
+			boost::algorithm::trim(m_nodeContent);
+
+			if(nodeName == "F")
+				m_pkey -> m_function = m_nodeContent;
+			else if(nodeName == "V")
+				m_pkey -> m_lfsrInitValue = boost::dynamic_bitset<>(m_nodeContent);
+			else if(nodeName == "P")
+				m_pkey -> m_lfsrPolinom = m_nodeContent;
+
+			m_nodeContent.clear();
+		}
+
+		Key               *m_pkey;
+		std::string        m_nodeContent;
+};
+
+
+
 Key parseKeyXML(const std::string &fileName)
 {
-	xmlpp::DomParser parser;
-	parser.parse_file(fileName);
 	Key result;
-	if(parser)
-	{
-		const xmlpp::Node* pNode = parser.get_document() -> get_root_node();
-		std::string nodeName = pNode -> get_name();
-		std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
-
-		if(nodeName == "KEY")
-		{
-			xmlpp::Node::NodeList list = pNode -> get_children();
-			for(xmlpp::Node::NodeList::iterator iter = list.begin(); iter != list.end(); iter++)
-			{
-				nodeName = (*iter) -> get_name();
-				std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
-
-				if(nodeName == "F")
-				{
-					const xmlpp::ContentNode* nodeContent = 
-						dynamic_cast<const xmlpp::ContentNode*>(*((*iter) -> get_children().begin()));
-
-					result.m_function = nodeContent -> get_content();
-					boost::algorithm::trim(result.m_function);
-				}
-				else if(nodeName == "V")
-				{
-					const xmlpp::ContentNode* nodeContent = 
-						dynamic_cast<const xmlpp::ContentNode*>(*((*iter) -> get_children().begin()));
-
-					std::string value = std::string(nodeContent -> get_content());
-					boost::algorithm::trim(value);
-
-					result.m_lfsrInitValue = boost::dynamic_bitset<>(value);
-				}
-				else if(nodeName == "P")
-				{
-					const xmlpp::ContentNode* nodeContent = 
-						dynamic_cast<const xmlpp::ContentNode*>(*((*iter) -> get_children().begin()));
-
-					result.m_lfsrPolinom = std::string(nodeContent -> get_content());
-					boost::algorithm::trim(result.m_lfsrPolinom);
-				}
-			}
-		}
-	}
+	KeyParser parser(&result);
+	parser.set_substitute_entities(true);
+	parser.parse_file(fileName);
 
 	assert(result.m_lfsrInitValue.size() && result.m_lfsrPolinom.size() && result.m_function.size());
+
 	return result;
 }
 
@@ -83,3 +85,4 @@ void writeKeyXML(const std::string &path, const Key &key)
 
 	document.write_to_file(path);
 }
+

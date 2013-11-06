@@ -3,62 +3,63 @@
 #include <cassert>
 #include <algorithm>
 
+#include <boost/algorithm/string.hpp>
+
 #include <libxml++/libxml++.h>
+#include <glibmm/convert.h> 
 
-static void processNode(const xmlpp::Node* node, std::vector<UserInfo> &usersInfo)
+
+class UsersInfoParser: public xmlpp::SaxParser
 {
-	std::string nodeName = node -> get_name();
-	std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
-	if(nodeName == "USER")
-	{
-		UserInfo entry;
-
-		const xmlpp::Element* nodeElement = dynamic_cast<const xmlpp::Element*>(node);
-		if(!nodeElement)
+	public:
+		virtual ~UsersInfoParser()
 		{
-			assert(false);
-			return;
 		}
 
-		const xmlpp::Element::AttributeList& attributes = nodeElement -> get_attributes();
-		if(attributes.empty())
+		std::vector<UserInfo>  m_info;
+
+	protected:
+		virtual void on_start_element(const Glib::ustring& name,
+                                   const AttributeList& attributes)
 		{
-			assert(false);
-			return;
-		}
+			std::string nodeName(name);
+			boost::algorithm::trim(nodeName);
+			std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
 
-		for(xmlpp::Element::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
-		{
-			const xmlpp::Attribute* attribute = *iter;
 
-			std::string attrName = attribute -> get_name();
-			std::transform(attrName.begin(), attrName.end(), attrName.begin(), ::toupper);
-
-			if(attrName == "ID")
+			if(nodeName == "USER")
 			{
-				entry.m_id = attribute -> get_value();
-				break;
+				UserInfo currUser;
+				for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
+				{
+					try
+					{
+						std::string arrtName(iter -> name);
+						boost::algorithm::trim(arrtName);
+						std::transform(arrtName.begin(), arrtName.end(), arrtName.begin(), ::toupper);
+
+						if(arrtName == "ID")
+						{
+							currUser.m_id = iter -> value;
+							break;
+						}	
+					}
+					catch(const Glib::ConvertError& ex)
+					{
+						throw std::runtime_error("WtrkInfoParser: file processed failed (" + ex.what() +")");
+					}
+				}
+				m_info.push_back(currUser);
 			}
 		}
+};
 
-		usersInfo.push_back(entry);
-	}
-}
 
 std::vector<UserInfo> parseUsersInfoXML(const std::string &fileName)
 {
-	xmlpp::DomParser parser;
+	UsersInfoParser parser;
+	parser.set_substitute_entities(true);
 	parser.parse_file(fileName);
 
-	std::vector<UserInfo> result;
-	if(parser)
-	{
-		const xmlpp::Node* pNode = parser.get_document() -> get_root_node();
-		xmlpp::Node::NodeList list = pNode -> get_children();
-		
-		for(xmlpp::Node::NodeList::iterator iter = list.begin(); iter != list.end(); ++iter)
-			processNode(*iter, result);
-	}
-
-	return result;
+	return parser.m_info;
 }

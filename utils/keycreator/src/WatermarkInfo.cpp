@@ -2,92 +2,105 @@
 
 #include <cassert>
 #include <algorithm>
+#include <stdexcept>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <libxml++/libxml++.h>
+#include <glibmm/convert.h> 
 
 
-static void processNode(const xmlpp::Node* node, std::vector<WatermarkEntry> &wtrkInfo)
+class WtrkInfoParser: public xmlpp::SaxParser
 {
-	std::string nodeName = node -> get_name();
-	std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
-	if(nodeName == "ENTRY")
-	{
-		WatermarkEntry entry;
-
-		const xmlpp::Element* nodeElement = dynamic_cast<const xmlpp::Element*>(node);
-		if(!nodeElement)
+	public:
+		virtual ~WtrkInfoParser()
 		{
-			assert(false);
-			return;
 		}
 
-		const xmlpp::Element::AttributeList& attributes = nodeElement -> get_attributes();
+		std::vector<WatermarkEntry>  m_info;
 
-		for(xmlpp::Element::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
+	protected:
+		virtual void on_start_element(const Glib::ustring& name,
+                                   const AttributeList& attributes)
 		{
-			std::string attrName = (*(attributes.begin())) -> get_name();
-			std::transform(attrName.begin(), attrName.end(), attrName.begin(), ::toupper);
-			if(attrName == "POSITION")
-			{
-				entry.m_position = boost::lexical_cast<std::size_t>((*(attributes.begin())) -> get_value());
-				break;
-			}
-		}
-
-		xmlpp::Node::NodeList list = node->get_children();
-		std::size_t numValues = 0;
-
-		for(xmlpp::Node::NodeList::iterator iter = list.begin(); iter != list.end(); iter++)
-		{
-			nodeName = (*iter) -> get_name();
-
+			std::string nodeName(name);
+			boost::algorithm::trim(nodeName);
 			std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
+
+
+			if(nodeName == "ENTRY")
+				for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
+				{
+					try
+					{
+						std::string arrtName(iter -> name);
+						boost::algorithm::trim(arrtName);
+						std::transform(arrtName.begin(), arrtName.end(), arrtName.begin(), ::toupper);
+
+						if(arrtName == "POSITION")
+						{
+							m_currentEntry.m_position = 
+								boost::lexical_cast<std::size_t>(iter -> value);
+							break;
+						}	
+					}
+					catch(const Glib::ConvertError& ex)
+					{
+						throw std::runtime_error("WtrkInfoParser: file processed failed (" + ex.what() +")");
+					}
+				}
+		}
+
+		virtual void on_characters(const Glib::ustring& characters)
+		{
+			m_nodeContent += characters;
+		}
+
+		virtual void on_end_element(const Glib::ustring& name)
+		{
+			std::string nodeName(name);
+
+			boost::algorithm::trim(nodeName);
+			std::transform(nodeName.begin(), nodeName.end(), nodeName.begin(), ::toupper);
+
+			boost::algorithm::trim(m_nodeContent);
 
 			if(nodeName == "V")
 			{
-				const xmlpp::ContentNode* nodeContent = 
-					dynamic_cast<const xmlpp::ContentNode*>(*((*iter) -> get_children().begin()));
-
-				if(numValues == 0)
-					entry.m_v1 = boost::dynamic_bitset<>(std::string(nodeContent -> get_content()));
-				else if(numValues == 1)
-					entry.m_v2 = boost::dynamic_bitset<>(std::string(nodeContent -> get_content()));
+				if(m_currentEntry.m_v1 == boost::dynamic_bitset<>())
+					m_currentEntry.m_v1 = 
+						boost::dynamic_bitset<>(m_nodeContent);
 				else
-				{
-					assert(false);
-					return;
-				}
-				numValues++;
+					m_currentEntry.m_v2 = 
+						boost::dynamic_bitset<>(m_nodeContent);
 			}
 			else if(nodeName == "DEFAULT_VALUE")
 			{
-				const xmlpp::ContentNode* nodeContent = 
-					dynamic_cast<const xmlpp::ContentNode*>(*((*iter) -> get_children().begin()));
-				entry.m_defaultValue = boost::dynamic_bitset<>(std::string(nodeContent -> get_content()));
+				m_currentEntry.m_defaultValue = 
+					boost::dynamic_bitset<>(m_nodeContent);
 			}
+			else if(nodeName == "ENTRY")
+			{
+				m_info.push_back(m_currentEntry);
+				m_currentEntry = WatermarkEntry();
+			}
+
+			m_nodeContent.clear();
 		}
 
-		wtrkInfo.push_back(entry);
-	}
-}
+		WatermarkEntry     m_currentEntry;
+		std::string        m_nodeContent;
+};
+
+
 
 std::vector<WatermarkEntry> parseWatermarkInfoXML(const std::string &fileName)
 {
-	xmlpp::DomParser parser;
+	WtrkInfoParser parser;
+	parser.set_substitute_entities(true);
 	parser.parse_file(fileName);
 
-	std::vector<WatermarkEntry> result;
-	if(parser)
-	{
-		const xmlpp::Node* pNode = parser.get_document() -> get_root_node();
-		xmlpp::Node::NodeList list = pNode -> get_children();
-
-		for(xmlpp::Node::NodeList::iterator iter = list.begin(); iter != list.end(); ++iter)
-			processNode(*iter, result);
-	}
-
-	return result;
+	return parser.m_info;
 }
 

@@ -29,3 +29,4 @@ target_link_libraries (tests ${LIBS} ${Boost_LIBRARIES})
 
 enable_testing()
 add_test (tests ${BUILD_DIR}/tests)
+add_dependencies(${PROJECT} boolcalc)

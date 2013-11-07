@@ -40,3 +40,4 @@ endif()
 
 add_executable(${PROJECT} ${SOURCES}) 
 target_link_libraries(${PROJECT} ${LIBS})
+add_dependencies(${PROJECT} boolcalc)

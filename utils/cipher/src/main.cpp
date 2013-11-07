@@ -50,11 +50,11 @@ int main(int argc, char **argv)
 		po::options_description desc("Options");
 		desc.add_options()
 			("help", "produce help message")
-			("i", po::value<std::string>(), 
+			("input,i", po::value<std::string>(), 
 				"path to file with watermark information (prodused by mpeg2wtrkinfo utils)")
-			("o", po::value<std::string>(), 
+			("output,o", po::value<std::string>(), 
 				"path to file with informations about users")
-			("key", po::value<std::string>(), "path to key file")
+			("key,k", po::value<std::string>(), "path to key file")
 		;
 
 		po::variables_map vm;        
@@ -67,14 +67,14 @@ int main(int argc, char **argv)
 			return 0;
 		}
 
-		if(!vm.count("i") || !vm.count("o") || !vm.count("key"))
+		if(!vm.count("input") || !vm.count("output") || !vm.count("key"))
 		{
 			std::cout << desc << "\n";
 			return 0;
 		}
 
 		Key privateKey = parseKeyXML(vm["key"].as<std::string>());
-		process(vm["i"].as<std::string>(), vm["o"].as<std::string>(), privateKey);
+		process(vm["input"].as<std::string>(), vm["output"].as<std::string>(), privateKey);
 	}
 	catch(std::exception& e) {
 		std::cerr << "Error: " << e.what() << "\n";

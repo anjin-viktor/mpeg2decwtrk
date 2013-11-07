@@ -6,7 +6,13 @@
 #include "WatermarkInfo.h"
 
 
-void createKeys(std::vector<UserInfo> &users, const std::vector<WatermarkEntry> &wtrkInfo, const Key &key);
+struct Config
+{
+	std::size_t max_affected_bits;
+};
+
+void createKeys(std::vector<UserInfo> &users, const std::vector<WatermarkEntry> &wtrkInfo, 
+	const Config &config, const Key &key);
 
 
 #endif

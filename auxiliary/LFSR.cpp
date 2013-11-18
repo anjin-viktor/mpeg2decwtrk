@@ -1,12 +1,19 @@
 #include "LFSR.h"
 
 #include <BoolCalc.h>
-
+#include <iostream>
 
 LFSR::LFSR(const std::string &polinom, const boost::dynamic_bitset<> &initVector):
-m_vector(initVector),
-m_ppolinom(new bcc::Function(polinom))
+m_vector(initVector)
 {
+	try
+	{
+		m_ppolinom = std::shared_ptr<bcc::Function>(new bcc::Function(polinom, bcc::Function::MAP));
+	}
+	catch(std::runtime_error &)
+	{
+		m_ppolinom = std::shared_ptr<bcc::Function>(new bcc::Function(polinom));
+	}
 }
 
 boost::dynamic_bitset<> LFSR::getLFSRVector() const

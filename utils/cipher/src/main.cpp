@@ -22,20 +22,17 @@ void process(const std::string &in, const std::string &out, const Key &key)
 	char ch;
 	fileIn.get(ch);
 
-	LFSR lfsr(key.m_lfsrPolinom, key.m_lfsrInitValue);
-
-	bcc::Function f(key.m_function);
+	LFSR lfsr(key.m_lfsrPolinom, key.m_lfsrInitValue);	
+	bcc::Function f(key.m_function, bcc::Function::LIST_OF_MONOMS, 
+		bcc::Function(key.m_lfsrPolinom).getNumberOfVars());
 
 	for(;!fileIn.eof();)
 	{
 		char gamma = 0;
 		unsigned char mask = 1 << (sizeof(char) * CHAR_BIT - 1);
-
 		for(;mask; lfsr.nextState(), mask >>= 1)
-		{
 			if(f.calculate(lfsr.getLFSRVector()))
 				gamma |= mask;
-		}
 
 		fileOut.put(ch ^ gamma);
 		fileIn.get(ch);

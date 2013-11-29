@@ -17,7 +17,7 @@ class LFSR
 		LFSR(const std::string &polinom, const boost::dynamic_bitset<> &initVector);
 
 		void nextState();
-		boost::dynamic_bitset<> getLFSRVector() const;
+		const boost::dynamic_bitset<> &getLFSRVector() const;
 
 
 	private:

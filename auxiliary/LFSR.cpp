@@ -16,7 +16,7 @@ m_vector(initVector)
 	}
 }
 
-boost::dynamic_bitset<> LFSR::getLFSRVector() const
+const boost::dynamic_bitset<> &LFSR::getLFSRVector() const
 {
 	return m_vector;
 }

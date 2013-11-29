@@ -133,8 +133,10 @@ static bool execListOfMonoms(FunctionCalculatorImpl *pimpl, const boost::dynamic
 		throw std::runtime_error("vector of values is too smal");
 
 	for(;itr != pimpl -> m_monoms.end(); itr++)
-		if(itr -> first.is_subset_of(values) && !itr -> second.intersects(values))
+	{
+		if(itr -> first.is_subset_of(values) && !values.intersects(itr -> second))
 			result = !result;
+	}
 	return result;
 }
 
@@ -183,7 +185,7 @@ template <typename T>
 static bool execMap(FunctionCalculatorImpl *pimpl, const T& values)
 {
 	std::size_t position = 0;
-	for(std::size_t i=0; i<pimpl -> m_values.first.size(); i++)
+	for(std::size_t i=0, size=pimpl -> m_values.first.size(); i<size; i++)
 		if(values[pimpl -> m_values.first[i]])
 			position |= 1 << i;
 

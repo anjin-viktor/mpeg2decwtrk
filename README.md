@@ -24,6 +24,7 @@ Use `make test` for testing.
 	./build/mpeg2wtrkinfo  -i ./test_info/fair.mpeg -o wtrk_info
 
 2) Create decryption keys for users
+
 	./build/keycreator  --wtrk_info wtrk_info  --users_info ./test_info/users_info  --key ./test_info/key  -o ./out_dir
 
 3) Encryption
@@ -31,6 +32,7 @@ Use `make test` for testing.
 	./build/cipher -i test_info/fair.mpeg -o fair.enc -k ../test_info/key
 
 4) Decryption
+
 	./build/cipher -i fair.enc  -o fair1.mpeg -k users_keys/1 
 	./build/cipher -i fair.enc  -o fair2.mpeg -k users_keys/2
 	./build/cipher -i fair.enc  -o fair3.mpeg -k users_keys/3 

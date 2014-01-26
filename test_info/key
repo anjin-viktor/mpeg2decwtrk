@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<key>
+	<f>
+	x5 + x6 + x7 + x8 + x0 &amp; x4 + x0 &amp; x6 + x1 &amp; x7
+	+ x1 &amp; x9 + x2 &amp; x8 + x2 &amp; x9 + x3 &amp; x4 + x0 &amp; x1 &amp; x5
+	+ x0 &amp; x1 &amp; x6 + x0 &amp; x1 &amp; x7 + x0 &amp; x1 &amp; x8 + x0 &amp; x2 &amp; x6
+	+ x0 &amp; x2 &amp; x7 + x0 &amp; x3 &amp; x4 + x0 &amp; x3 &amp; x5 + x0 &amp; x3 &amp; x6
+	+ x1 &amp; x2 &amp; x4 + x1 &amp; x2 &amp; x7 + x1 &amp; x3 &amp; x4 + x1 &amp; x3 &amp; x6
+	+ x1 &amp; x3 &amp; x7 + x0 &amp; x1 &amp; x2 &amp; x4 + x0 &amp; x1 &amp; x2 &amp; x6
+	+ x0 &amp; x1 &amp; x2 &amp; x7 + x0 &amp; x1 &amp; x2 &amp; x9 + x0 &amp; x1 &amp; x3 &amp; x4
+	+ x0 &amp; x1 &amp; x3 &amp; x6 + x0 &amp; x1 &amp; x3 &amp; x8 + x0 &amp; x2 &amp; x3 &amp; x5
+	+ x0 &amp; x2 &amp; x3 &amp; x7 + x1 &amp; x2 &amp; x3 &amp; x6 + x1 &amp; x2 &amp; x3 &amp; x8
+	+ x1 &amp; x3 &amp; x4 &amp; x5 + x1 &amp; x3 &amp; x4 &amp; x6 + x0 &amp; x1 &amp; x2 &amp; x3 &amp; x6
+	+ x0 &amp; x1 &amp; x2 &amp; x3 &amp; x7 + x0 &amp; x1 &amp; x3 &amp; x4 &amp; x5
+	+ x0 &amp; x1 &amp; x3 &amp; x4 &amp; x6 + x1 &amp; x2 &amp; x3 &amp; x4 &amp; x5
+	+ x1 &amp; x2 &amp; x3 &amp; x4 &amp; x6 + x0 &amp; x1 &amp; x2 &amp; x3 &amp; x4 &amp; x5
+	+ x0 &amp; x1 &amp; x2 &amp; x3 &amp; x4 &amp; x6
+	</f>
+	<p>x88 + x82 + x79 + x54 + x52 + x41 + x38 + x0 + 1</p>
+	<v>00010000100000000100000001000001000100000010000010000100000010001000000001000000000000100</v>
+</key>

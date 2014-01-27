@@ -11,6 +11,10 @@ Requements:
 
 2) boost
 
+3) libxml
+
+4) libxml++
+
 
 	cmake ./ -DCMAKE_BUILD_TYPE=Release
 	make
@@ -25,11 +29,11 @@ Use `make test` for testing.
 
 2) Create decryption keys for users
 
-	./build/keycreator  --wtrk_info wtrk_info  --users_info ./test_info/users_info  --key ./test_info/key  -o ./out_dir
+	./build/keycreator  --wtrk_info wtrk_info  --users_info ./test_info/users_info  --key ./test_info/key  -o ./users_keys
 
 3) Encryption
 
-	./build/cipher -i test_info/fair.mpeg -o fair.enc -k ../test_info/key
+	./build/cipher -i test_info/fair.mpeg -o fair.enc -k test_info/key
 
 4) Decryption
 

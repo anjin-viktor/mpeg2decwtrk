@@ -23,7 +23,7 @@ void process(const std::string &in, const std::string &out, const Key &key)
 	fileIn.get(ch);
 
 	LFSR lfsr(key.m_lfsrPolinom, key.m_lfsrInitValue);	
-	bcc::Function f(key.m_function, bcc::Function::LIST_OF_MONOMS, 
+	bcc::Function f(key.m_function, bcc::Function::BDD, 
 		bcc::Function(key.m_lfsrPolinom).getNumberOfVars());
 
 	for(;!fileIn.eof();)
